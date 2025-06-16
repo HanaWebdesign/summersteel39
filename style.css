@@ -48,6 +48,20 @@ body {
   }
 }
 
+/* ハンバーガーメニュー */
+/*.hamburger {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 2rem;
+  color: #333;
+  z-index: 10;
+  cursor: pointer;
+  background: rgba(255,255,255,0.6);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
 /* キャッチコピー */
 .catch {
   text-align: center;
@@ -85,9 +99,8 @@ body {
   line-height: 1.8;
 }
 
-/* フッター */
 footer {
-  background: #7ecef4;
+  background: #7ecef4; /* 今の水色 */
   color: #fff;
   padding: 20px;
   font-size: 0.9rem;
@@ -101,18 +114,19 @@ footer {
   gap: 10px;
 }
 
+
 .footer-copy {
   text-align: right;
   flex-shrink: 0;
   white-space: nowrap;
 }
 
-/* フェードインアニメ */
 .fade-in.appear {
   opacity: 1;
   transform: translateY(0);
 }
 
+/* 上からふわっと */
 .fade-in {
   opacity: 0;
   transform: translateY(-30px);
@@ -126,7 +140,13 @@ footer {
   }
 }
 
-/* SNSリンク */
+a:link,
+a:visited {
+  color: inherit; /* または希望の色に固定例：#333 */
+  text-decoration: none;
+}
+
+/* SNSリンクエリアのレイアウト調整 */
 .sns-links ul {
   display: flex;
   justify-content: center;
@@ -137,10 +157,12 @@ footer {
   list-style: none;
 }
 
+/* リスト項目の余白調整 */
 .sns-links li {
   margin: 0;
 }
 
+/* リンクのスタイル（シャープで中性的） */
 .sns-links li a {
   display: inline-block;
   padding: 6px 12px;
@@ -152,37 +174,53 @@ footer {
   font-family: 'Zen Kurenaido', sans-serif;
 }
 
+/* ホバー時のアクション */
 .sns-links li a:hover {
   color: #7ecef4;
   border-bottom: 1px solid #222;
 }
-
-/* リンクの装飾リセット */
-a:link,
-a:visited {
-  color: inherit;
-  text-decoration: none;
+/* デフォルト（PC）ではスマホ画像を非表示 */
+.only-sp-img {
+  display: none;
 }
 
-/* レスポンシブ対応 */
+/* レスポンシブ対応（スマホ幅以下） */
 @media screen and (max-width: 768px) {
-  .sns-links ul {
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
+  .main-visual {
+    display: none; /* PC画像を非表示 */
   }
 
-  .sns-links li a {
-    font-size: 0.95rem;
-    padding: 8px 10px;
+    .sp-visual {
+    background: url('./image/girl.png') no-repeat center/contain;
+    width: 100%;
+    height: 300px; /* 好みで調整 */
+    margin: 0 auto;
+    display: block;
+  }
+
+  .catch-sp-img {
+    display: block;
+    max-width: 90%;
+    height: auto;
+    margin: 0 auto 20px;
+  }
+
+  .only-sp-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
   }
 
   .visual-wrapper {
-    height: 70vh;
+    height: auto; /* 高さ固定を解除 */
   }
 
   .logo-overlay {
     width: 80%;
+    top: 50%; /* 必要に応じて調整 */
   }
 
   .video-card {
@@ -200,26 +238,14 @@ a:visited {
     font-size: 15px;
   }
 
-    .main-visual {
-    display: none; /* PC用画像を消す */
+  .sns-links ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
   }
 
-  .only-sp-img {
-    display: block;
-    width: 100%;
-    height: auto;
-    object-fit: cover;
+  .sns-links li a {
+    font-size: 0.95rem;
+    padding: 8px 10px;
   }
-}
-
-/* PCではスマホ画像を非表示 */
-.only-sp-img {
-  display: none;
-}
-
-/* 通常（PCなど）の画像用 */
-.responsive-image {
-  width: 100%;
-  height: auto;
-  display: block;
 }
