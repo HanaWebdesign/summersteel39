@@ -226,4 +226,14 @@ a:visited {
     font-size: 0.95rem;
     padding: 8px 10px;
   }
+
+  .visual-wrapper {
+  background-image: url('./image/girl.png');
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
 }
