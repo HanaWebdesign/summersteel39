@@ -227,13 +227,15 @@ a:visited {
     padding: 8px 10px;
   }
 
-  .visual-wrapper {
-  background-image: url('./image/girl.png');
-  background-size: cover;
-  background-position: center;
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
+  /* デフォルトでは非表示（PCサイズ） */
+.only-sp-img {
+  display: none;
+}
+  .only-sp-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+    margin: 0 auto;
 }
 }
