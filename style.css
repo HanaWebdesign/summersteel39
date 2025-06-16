@@ -1,0 +1,229 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Zen Kurenaido', sans-serif;
+  background: #f3fafa;
+  overflow-x: hidden;
+}
+
+/* 女の子の背景画像 */
+.visual-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main-visual {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.logo-overlay {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateY(-50px);
+  opacity: 0;
+  animation: dropIn 1.8s ease-out 0.8s forwards;
+  width: 60%;
+  max-width: 600px;
+  pointer-events: none;
+}
+
+@keyframes dropIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0);
+  }
+}
+
+/* ハンバーガーメニュー */
+/*.hamburger {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 2rem;
+  color: #333;
+  z-index: 10;
+  cursor: pointer;
+  background: rgba(255,255,255,0.6);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+/* キャッチコピー */
+.catch {
+  text-align: center;
+  font-size: 1.6rem;
+  margin: 50px 0 20px;
+}
+
+/* 動画カード2つ */
+.video-section {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 40px;
+}
+
+.video-card {
+  flex: 1 1 45%;
+  max-width: 500px;
+  min-width: 300px;
+}
+
+.video-card iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+}
+
+/* 利用規約（仮） */
+.terms {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 30px;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+footer {
+  background: #7ecef4; /* 今の水色 */
+  color: #fff;
+  padding: 20px;
+  font-size: 0.9rem;
+}
+
+.footer-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+
+.footer-copy {
+  text-align: right;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.fade-in.appear {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 上からふわっと */
+.fade-in {
+  opacity: 0;
+  transform: translateY(-30px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+a:link,
+a:visited {
+  color: inherit; /* または希望の色に固定例：#333 */
+  text-decoration: none;
+}
+
+/* SNSリンクエリアのレイアウト調整 */
+.sns-links ul {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 0;
+  margin: 20px auto;
+  list-style: none;
+}
+
+/* リスト項目の余白調整 */
+.sns-links li {
+  margin: 0;
+}
+
+/* リンクのスタイル（シャープで中性的） */
+.sns-links li a {
+  display: inline-block;
+  padding: 6px 12px;
+  text-decoration: none;
+  color: #222;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #7ecef4;
+  transition: color 0.2s, border-bottom 0.2s;
+  font-family: 'Zen Kurenaido', sans-serif;
+}
+
+/* ホバー時のアクション */
+.sns-links li a:hover {
+  color: #7ecef4;
+  border-bottom: 1px solid #222;
+}
+
+@media screen and (max-width: 768px) {
+  .sns-links ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sns-links li a {
+    font-size: 0.95rem;
+    padding: 8px 10px;
+  }
+
+  .visual-wrapper {
+    height: 70vh;
+  }
+
+  .logo-overlay {
+    width: 80%;
+  }
+
+  .video-card {
+    min-width: 100%;
+    padding: 0 10px;
+  }
+
+  .catch {
+    font-size: 1.3rem;
+    margin: 30px 0 10px;
+  }
+
+  .terms {
+    padding: 20px;
+    font-size: 15px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .sns-links ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sns-links li a {
+    font-size: 0.95rem;
+    padding: 8px 10px;
+  }
+}
