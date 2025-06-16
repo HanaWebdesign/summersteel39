@@ -231,11 +231,13 @@ a:visited {
 .only-sp-img {
   display: none;
 }
+
+@media screen and (max-width: 768px) {
   .only-sp-img {
     display: block;
     width: 100%;
     height: auto;
     max-width: 600px;
     margin: 0 auto;
-}
+  }
 }
