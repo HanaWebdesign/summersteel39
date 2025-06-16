@@ -10,6 +10,11 @@ body {
   overflow-x: hidden;
 }
 
+/* デフォルトではスマホ画像非表示 */
+.only-sp-img {
+  display: none;
+}
+
 /* 女の子の背景画像 */
 .visual-wrapper {
   position: relative;
@@ -179,73 +184,21 @@ a:visited {
   color: #7ecef4;
   border-bottom: 1px solid #222;
 }
-/* デフォルト（PC）ではスマホ画像を非表示 */
-.only-sp-img {
-  display: none;
-}
 
-/* レスポンシブ対応（スマホ幅以下） */
+/* スマホ時のみ表示＆メイン画像非表示 */
 @media screen and (max-width: 768px) {
   .main-visual {
-    display: none; /* PC画像を非表示 */
-  }
-
-    .sp-visual {
-    background: url('./image/girl.png') no-repeat center/contain;
-    width: 100%;
-    height: 300px; /* 好みで調整 */
-    margin: 0 auto;
-    display: block;
-  }
-
-  .catch-sp-img {
-    display: block;
-    max-width: 90%;
-    height: auto;
-    margin: 0 auto 20px;
+    display: none;
   }
 
   .only-sp-img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100vh;
     object-fit: cover;
-    position: relative;
-    z-index: 1;
-  }
-
-  .visual-wrapper {
-    height: auto; /* 高さ固定を解除 */
-  }
-
-  .logo-overlay {
-    width: 80%;
-    top: 50%; /* 必要に応じて調整 */
-  }
-
-  .video-card {
-    min-width: 100%;
-    padding: 0 10px;
-  }
-
-  .catch {
-    font-size: 1.3rem;
-    margin: 30px 0 10px;
-  }
-
-  .terms {
-    padding: 20px;
-    font-size: 15px;
-  }
-
-  .sns-links ul {
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .sns-links li a {
-    font-size: 0.95rem;
-    padding: 8px 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1; /* ロゴの下になるよう調整 */
   }
 }
