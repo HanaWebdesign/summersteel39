@@ -239,3 +239,9 @@ footer {
   border-bottom: 1px solid #7ecef4;
   padding-bottom: 4px;
 }
+
+@media (max-width: 768px) {
+  .main-visual {
+    content: url("girl.png"); /* スマホ時の画像 */
+  }
+}
