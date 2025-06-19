@@ -13,7 +13,10 @@
   <header>
   <!-- 背景画像セクション -->
   <div class="visual-wrapper">
-    <img src="./image/1.png" alt="女の子の画像" class="main-visual">
+<picture>
+  <source srcset="./image/girl.png" media="(max-width: 768px)">
+  <img class="main-visual" src="./image/1.png" alt="ビジュアル画像" />
+</picture>
 
     <!-- サマースチルロゴ -->
     <img src="./image/3-removebg-preview.png" alt="サマースチル" class="logo-overlay">
