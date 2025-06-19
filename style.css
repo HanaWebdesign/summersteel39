@@ -10,11 +10,6 @@ body {
   overflow-x: hidden;
 }
 
-/* デフォルトではスマホ画像非表示 */
-.only-sp-img {
-  display: none;
-}
-
 /* 女の子の背景画像 */
 .visual-wrapper {
   position: relative;
@@ -51,20 +46,6 @@ body {
     opacity: 1;
     transform: translate(-50%, -50%) translateY(0);
   }
-}
-
-/* ハンバーガーメニュー */
-/*.hamburger {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 2rem;
-  color: #333;
-  z-index: 10;
-  cursor: pointer;
-  background: rgba(255,255,255,0.6);
-  padding: 8px 16px;
-  border-radius: 8px;
 }
 
 /* キャッチコピー */
@@ -104,26 +85,30 @@ body {
   line-height: 1.8;
 }
 
+/* フッター統一 */
 footer {
-  background: #7ecef4; /* 今の水色 */
+  width: 100%;
+  background-color: #7ecef4;
   color: #fff;
   padding: 20px;
+  text-align: center;
   font-size: 0.9rem;
 }
 
 .footer-flex {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-
 .footer-copy {
-  text-align: right;
+  text-align: center;
   flex-shrink: 0;
   white-space: nowrap;
+  font-size: 14px;
+  color: #333;
 }
 
 .fade-in.appear {
@@ -147,7 +132,7 @@ footer {
 
 a:link,
 a:visited {
-  color: inherit; /* または希望の色に固定例：#333 */
+  color: inherit;
   text-decoration: none;
 }
 
@@ -162,12 +147,10 @@ a:visited {
   list-style: none;
 }
 
-/* リスト項目の余白調整 */
 .sns-links li {
   margin: 0;
 }
 
-/* リンクのスタイル（シャープで中性的） */
 .sns-links li a {
   display: inline-block;
   padding: 6px 12px;
@@ -179,105 +162,80 @@ a:visited {
   font-family: 'Zen Kurenaido', sans-serif;
 }
 
-/* ホバー時のアクション */
 .sns-links li a:hover {
   color: #7ecef4;
   border-bottom: 1px solid #222;
 }
 
-/* スマホ時のみ表示＆メイン画像非表示 */
-@media screen and (max-width: 768px) {
-  .main-visual {
-    display: none;
-  }
+/* music.html 中央ぞろえ */
 
-  .only-sp-img {
-    display: block;
-    width: 100%;
-    height: 100vh;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1; /* ロゴの下になるよう調整 */
-  }
+.music-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-  #loading-screen {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(to bottom, #87cefa, #ffffff); /* 空色グラデーション */
-  z-index: 9999;
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* ← 横中央 */
+  text-align: center;  /* ← テキスト中央 */
+}
+
+/* フッター見た目 */
+footer {
+  width: 100%;
+  background-color: #7ecef4;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.footer-flex {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: opacity 0.5s ease;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.loading-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.footer-copy {
+  text-align: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.back-to-top-page.subtle {
+  display: inline-block;
+  margin-top: 30px;
+  color: #555;
+  font-size: 0.85rem;
+  text-decoration: underline dotted;
+  opacity: 0.7;
+  transition: opacity 0.3s, color 0.3s;
 }
 
-.spinner {
-  width: 60px;
-  height: 60px;
-  border: 6px solid rgba(255, 255, 255, 0.3);
-  border-top: 6px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 20px;
+.back-to-top-page.subtle:hover {
+  color: #333;
+  opacity: 1;
 }
 
-.loading-text {
-  font-size: 3.5rem;
-  font-weight: bold;
-  color: #ffffff;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-#loading-screen {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(to bottom, #87cefa, #ffffff); /* 空色グラデーション */
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: opacity 0.5s ease;
-}
-
-.loading-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.spinner {
-  width: 60px;
-  height: 60px;
-  border: 6px solid rgba(255, 255, 255, 0.3);
-  border-top: 6px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 20px;
-}
-
-.loading-text {
-  font-size: 3.5rem;
-  font-weight: bold;
-  color: #ffffff;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.more-button {
+  border: none;
+  border-bottom: 1px solid #7ecef4;
+  padding-bottom: 4px;
 }

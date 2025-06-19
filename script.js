@@ -17,11 +17,3 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(fader);
   });
 });
-
-window.addEventListener("load", () => {
-  const loader = document.getElementById("loading-screen");
-  loader.style.opacity = "0";
-  setTimeout(() => {
-    loader.style.display = "none";
-  }, 500);
-});
