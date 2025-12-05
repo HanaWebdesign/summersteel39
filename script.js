@@ -1,17 +1,7 @@
 // 表示するYouTube動画のリスト
 // ★新曲が出たら、この配列に { id: "動画ID" } を1行追加するだけ★
-const musicVideos = [
-  { id: "6sy40Nt62Qg" },
-  { id: "4XapiQNR9hE" },
-  { id: "iEIXish0N4Q" },
-  { id: "SxHvLZ3qPK0" },
-  { id: "CJDA2jX40hA" },
-  { id: "cecapTEnZbs" },
-  { id: "uO9K0GlkIDg" },
-  { id: "MPrVORDlBuc" },
-  { id: "DhydFHrB1vI" },
-  { id: "1R2tLcBnBS4" }
-];
+const API_KEY = AIzaSyD7iHybNfXwiBC_jjh-THvjxjugqe7uOSM;
+const PLAYLIST_ID = PL_23ESG8aDXWqpTywyPxRP0zAvBmHcq3C;
 
 document.addEventListener('DOMContentLoaded', () => {
   // ① Musicページ用：動画を自動で追加
