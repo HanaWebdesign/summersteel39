@@ -143,45 +143,6 @@ async function loadTopTwoVideos() {
   }
 }
 
-
-    const url = `https://www.googleapis.com/youtube/v3/playlistItems?${params.toString()}`;
-    const res = await fetch(url);
-
-    if (!res.ok) {
-      console.error("YouTube API (top) error:", await res.text());
-      return;
-    }
-
-    const data = await res.json();
-    if (!Array.isArray(data.items)) return;
-
-    data.items.forEach(item => {
-      const snippet = item.snippet;
-      const videoId = snippet.resourceId?.videoId;
-      if (!videoId) return;
-
-      const card = document.createElement("div");
-      card.className = "video-card";
-
-      const iframe = document.createElement("iframe");
-      iframe.setAttribute("allowfullscreen", "");
-      iframe.src = `https://www.youtube.com/embed/${videoId}`;
-      iframe.loading = "lazy";
-
-      card.appendChild(iframe);
-
-      // Full Collectionリンクの前に挿入（なければ最後に追加）
-      if (link) {
-        section.insertBefore(card, link);
-      } else {
-        section.appendChild(card);
-      }
-    });
-  } catch (err) {
-    console.error("loadTopTwoVideos error:", err);
-  }
-}
-
 // フェードイン（元からあったやつ）
 function setupFadeIn() {
   const faders = document.querySelectorAll(".fade-in");
