@@ -1,13 +1,10 @@
-// ▼▼▼ 自分の値に書き換え済み ▼▼▼
+// ▼▼▼ APIキーとプレイリストID ▼▼▼
 const API_KEY = "AIzaSyD7iHybNfXwiBC_jjh-THvjxjugqe7uOSM";
 const PLAYLIST_ID = "PL_23ESG8aDXWqpTywyPxRP0zAvBmHcq3C";
-// ▲▲▲ ここはそのままでOK ▲▲▲
+// ▲▲▲ ここは変更しない ▲▲▲
 
 
-// 1回のリクエストで取る最大件数（YouTubeの上限は50）
-const MAX_RESULTS_PER_PAGE = 50;
-
-// 共通：プレイリストの全動画を取得する関数
+// プレイリスト全件取得
 async function fetchAllPlaylistItems() {
   let allItems = [];
   let pageToken = null;
@@ -16,166 +13,117 @@ async function fetchAllPlaylistItems() {
     while (true) {
       const params = new URLSearchParams({
         part: "snippet",
-        maxResults: MAX_RESULTS_PER_PAGE.toString(),
+        maxResults: "50",
         playlistId: PLAYLIST_ID,
         key: API_KEY,
       });
-      if (pageToken) {
-        params.set("pageToken", pageToken);
-      }
 
-      const url = `https://www.googleapis.com/youtube/v3/playlistItems?${params.toString()}`;
+      if (pageToken) params.set("pageToken", pageToken);
+
+      const url = `https://www.googleapis.com/youtube/v3/playlistItems?${params}`;
       const res = await fetch(url);
-
-      if (!res.ok) {
-        console.error("YouTube API error:", await res.text());
-        return [];
-      }
+      if (!res.ok) return [];
 
       const data = await res.json();
-      if (Array.isArray(data.items)) {
-        allItems = allItems.concat(data.items);
-      }
+      if (Array.isArray(data.items)) allItems.push(...data.items);
 
-      if (!data.nextPageToken) {
-        break;
-      }
+      if (!data.nextPageToken) break;
       pageToken = data.nextPageToken;
     }
-  } catch (err) {
-    console.error("fetchAllPlaylistItems error:", err);
+  } catch (e) {
+    console.error(e);
     return [];
   }
 
   return allItems;
 }
 
-// ② index.html 用：公開日の新しい順に最新2曲だけ表示
-async function loadTopTwoVideos() {
-  const section = document.getElementById("top-latest");
-  if (!section) return; // index.html 以外では何もしない
 
-  const link = section.querySelector(".more-button");
+// ① music.html（全曲表示）
+async function loadAllPlaylistVideos() {
+  const gallery = document.getElementById("music-gallery");
+  if (!gallery) return;
 
-  try {
-    // プレイリスト全件を取る
-    const params = new URLSearchParams({
-      part: "snippet",
-      maxResults: "50",
-      playlistId: PLAYLIST_ID,
-      key: API_KEY,
-    });
+  const allItems = await fetchAllPlaylistItems();
+  if (allItems.length === 0) return;
 
-    const url = `https://www.googleapis.com/youtube/v3/playlistItems?${params.toString()}`;
-    const res = await fetch(url);
+  gallery.innerHTML = "";
 
-    if (!res.ok) {
-      console.error("YouTube API (top) error:", await res.text());
-      return;
-    }
+  allItems.forEach(item => {
+    const videoId = item.snippet.resourceId?.videoId;
+    if (!videoId) return;
 
-    const data = await res.json();
-    if (!Array.isArray(data.items)) return;
+    const wrap = document.createElement("div");
+    wrap.className = "video";
 
-    // 🔥 公開日の新しい順に並べ替え
-    const sorted = data.items.sort((a, b) => {
-      return new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt);
-    });
+    const iframe = document.createElement("iframe");
+    iframe.src = `https://www.youtube.com/embed/${videoId}`;
+    iframe.allowFullscreen = true;
+    iframe.loading = "lazy";
 
-    // 🔥 最新2曲だけ取り出し
-    const latestTwo = sorted.slice(0, 2);
-
-    // 既存の表示（たぶん何もないけど）を消す
-    section.querySelectorAll(".video-card").forEach(n => n.remove());
-
-    latestTwo.forEach(item => {
-      const videoId = item.snippet.resourceId?.videoId;
-      if (!videoId) return;
-
-      const card = document.createElement("div");
-      card.className = "video-card";
-
-      const iframe = document.createElement("iframe");
-      iframe.src = `https://www.youtube.com/embed/${videoId}`;
-      iframe.allowFullscreen = true;
-      iframe.loading = "lazy";
-
-      card.appendChild(iframe);
-
-      // Full Collectionリンクの直前に挿入
-      section.insertBefore(card, link);
-    });
-
-  } catch (err) {
-    console.error("loadTopTwoVideos error:", err);
-  }
+    wrap.appendChild(iframe);
+    gallery.appendChild(wrap);
+  });
 }
 
 
-// ② index.html 用：公開日の新しい順に最新2曲だけ表示
+// ② index.html（最新2曲表示）
 async function loadTopTwoVideos() {
   const section = document.getElementById("top-latest");
-  if (!section) return; // index.html 以外では何もしない
+  if (!section) return;
 
   const link = section.querySelector(".more-button");
 
   const allItems = await fetchAllPlaylistItems();
-  if (allItems.length === 0) {
-    return;
-  }
+  if (allItems.length === 0) return;
 
-  // 公開日の新しい順にソート
-  const sorted = [...allItems].sort((a, b) => {
-    const da = new Date(a.snippet.publishedAt);
-    const db = new Date(b.snippet.publishedAt);
-    return db - da; // 新しいほうを先に
-  });
+  // ★ 公開日が新しい順に並べ替え
+  const sorted = [...allItems].sort((a, b) =>
+    new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt)
+  );
 
   const latestTwo = sorted.slice(0, 2);
 
+  // 既存の動画削除
+  section.querySelectorAll(".video-card").forEach(e => e.remove());
+
   latestTwo.forEach(item => {
-    const snippet = item.snippet;
-    const videoId = snippet.resourceId && snippet.resourceId.videoId;
+    const videoId = item.snippet.resourceId?.videoId;
     if (!videoId) return;
 
     const card = document.createElement("div");
     card.className = "video-card";
 
     const iframe = document.createElement("iframe");
-    iframe.setAttribute("allowfullscreen", "");
     iframe.src = `https://www.youtube.com/embed/${videoId}`;
+    iframe.allowFullscreen = true;
     iframe.loading = "lazy";
 
     card.appendChild(iframe);
 
-    if (link) {
-      section.insertBefore(card, link);
-    } else {
-      section.appendChild(card);
-    }
+    section.insertBefore(card, link);
   });
 }
 
-// フェードイン（そのまま）
+
+// フェードイン
 function setupFadeIn() {
   const faders = document.querySelectorAll(".fade-in");
-  const options = { threshold: 0.1 };
-
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add("appear");
-      observer.unobserve(entry.target);
+  const obs = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("appear");
+      obs.unobserve(e.target);
     });
-  }, options);
+  }, { threshold: 0.1 });
 
-  faders.forEach(fader => {
-    observer.observe(fader);
-  });
+  faders.forEach(f => obs.observe(f));
 }
 
+
+// 読み込み時実行
 document.addEventListener("DOMContentLoaded", () => {
-  loadAllPlaylistVideos(); // music.html にいたら動く
-  loadTopTwoVideos();      // index.html にいたら動く
+  loadAllPlaylistVideos();
+  loadTopTwoVideos();
   setupFadeIn();
 });
