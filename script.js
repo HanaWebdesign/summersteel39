@@ -1,7 +1,7 @@
 // ▼▼▼ ここを自分の値に書き換えてね ▼▼▼
 // ※ 必ず "ダブルクォーテーション" で囲むこと！
-const API_KEY = "ここに自分のAPIキーを書く";
-const PLAYLIST_ID = "ここにプレイリストIDを書く"; // PL_ から始まるやつ
+const API_KEY = "AIzaSyD7iHybNfXwiBC_jjh-THvjxjugqe7uOSM";
+const PLAYLIST_ID = "PL_23ESG8aDXWqpTywyPxRP0zAvBmHcq3C&index=2"; // PL_ から始まるやつ
 // ▲▲▲ ここまで書き換え ▲▲▲
 
 
