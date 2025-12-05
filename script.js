@@ -79,21 +79,70 @@ async function loadAllPlaylistVideos() {
   }
 }
 
-// TOPページ用：最新2曲だけ表示する（index.html 用）
+// TOPページ用：公開日の新しい順で最新2曲だけ表示する
 async function loadTopTwoVideos() {
   const section = document.getElementById("top-latest");
   if (!section) return; // index.html 以外では何もしない
 
-  // Full Collection のリンクより前に動画カードを差し込みたいので保持しておく
   const link = section.querySelector(".more-button");
 
   try {
+    // まずはプレイリストから最大50件くらい取ってくる
     const params = new URLSearchParams({
       part: "snippet",
-      maxResults: "2",            // ★ここが「2曲だけ」ポイント
+      maxResults: "50",             // 多めに取ってきて…
       playlistId: PLAYLIST_ID,
       key: API_KEY,
     });
+
+    const url = `https://www.googleapis.com/youtube/v3/playlistItems?${params.toString()}`;
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      console.error("YouTube API (top) error:", await res.text());
+      return;
+    }
+
+    const data = await res.json();
+    if (!Array.isArray(data.items)) return;
+
+    // 公開日の新しい順に並べ替え
+    const sorted = [...data.items].sort((a, b) => {
+      const da = new Date(a.snippet.publishedAt);
+      const db = new Date(b.snippet.publishedAt);
+      return db - da; // 新しいものが先頭
+    });
+
+    // 先頭2件だけ使う
+    const latestTwo = sorted.slice(0, 2);
+
+    latestTwo.forEach(item => {
+      const snippet = item.snippet;
+      const videoId = snippet.resourceId?.videoId;
+      if (!videoId) return;
+
+      const card = document.createElement("div");
+      card.className = "video-card";
+
+      const iframe = document.createElement("iframe");
+      iframe.setAttribute("allowfullscreen", "");
+      iframe.src = `https://www.youtube.com/embed/${videoId}`;
+      iframe.loading = "lazy";
+
+      card.appendChild(iframe);
+
+      // Full Collectionリンクの前に挿入（なければ最後に追加）
+      if (link) {
+        section.insertBefore(card, link);
+      } else {
+        section.appendChild(card);
+      }
+    });
+  } catch (err) {
+    console.error("loadTopTwoVideos error:", err);
+  }
+}
+
 
     const url = `https://www.googleapis.com/youtube/v3/playlistItems?${params.toString()}`;
     const res = await fetch(url);
