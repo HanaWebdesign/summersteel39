@@ -124,33 +124,26 @@ main {
   padding: 40px 20px;
 }
 
-
-.video-card {
-  flex: 1 1 45%;
-  max-width: 500px;
-  min-width: 300px;
-}
-
-.video-card iframe {
-  display: block;
+.button-row {
   width: 100%;
-  aspect-ratio: 16 / 9;
-  border: none;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 .more-button {
   display: inline-block;
-  width: fit-content;
-  margin: 10px auto 0;
+  padding: 10px 24px;
   border: 1px solid #7ecef4;
   background: transparent;
   color: #333;
   text-align: center;
   transition: all 0.25s ease;
-  flex-basis: 100%;
-  width: fit-content; 
-  max-width: 20%;
-  margin: 20px auto 0;
+}
+
+.more-button:hover {
+  background: #7ecef4;
+  color: #fff;
 }
 
 /* ===== 楽曲一覧ページ ===== */
