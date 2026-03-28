@@ -132,12 +132,19 @@ main {
 }
 
 .more-button {
-  display: inline-block;
-  padding: 10px 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 28px;
   border: 1px solid #7ecef4;
   background: transparent;
   color: #333;
+  font-size: 0.95rem;
   text-align: center;
+  white-space: nowrap;
+  width: auto;
+  max-width: none;
+  min-width: 0;
   transition: all 0.25s ease;
 }
 
@@ -145,7 +152,6 @@ main {
   background: #7ecef4;
   color: #fff;
 }
-
 /* ===== 楽曲一覧ページ ===== */
 .music-gallery {
   display: flex;
