@@ -124,6 +124,7 @@ main {
   padding: 40px 20px;
 }
 
+
 .video-card {
   flex: 1 1 45%;
   max-width: 500px;
@@ -139,9 +140,17 @@ main {
 
 .more-button {
   display: inline-block;
-  border-bottom: 1px solid #7ecef4;
-  padding-bottom: 4px;
-  margin-top: 10px;
+  width: fit-content;
+  margin: 10px auto 0;
+  border: 1px solid #7ecef4;
+  background: transparent;
+  color: #333;
+  text-align: center;
+  transition: all 0.25s ease;
+  flex-basis: 100%;
+  width: fit-content; 
+  max-width: 20%;
+  margin: 20px auto 0;
 }
 
 /* ===== 楽曲一覧ページ ===== */
