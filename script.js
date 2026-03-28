@@ -18,24 +18,51 @@ async function fetchAllPlaylistItems() {
         key: API_KEY,
       });
 
-      if (pageToken) params.set("pageToken", pageToken);
+      if (pageToken) {
+        params.set("pageToken", pageToken);
+      }
 
       const url = `https://www.googleapis.com/youtube/v3/playlistItems?${params}`;
       const res = await fetch(url);
-      if (!res.ok) return [];
-
       const data = await res.json();
-      if (Array.isArray(data.items)) allItems.push(...data.items);
 
-      if (!data.nextPageToken) break;
+      if (!res.ok) {
+        console.error("YouTube API error:", data);
+        return [];
+      }
+
+      if (Array.isArray(data.items)) {
+        allItems.push(...data.items);
+      }
+
+      if (!data.nextPageToken) {
+        break;
+      }
+
       pageToken = data.nextPageToken;
     }
   } catch (e) {
-    console.error(e);
+    console.error("fetchAllPlaylistItems error:", e);
     return [];
   }
 
   return allItems;
+}
+
+
+// 共通：iframeカード作成
+function createVideoCard(videoId) {
+  const card = document.createElement("div");
+  card.className = "video-card";
+
+  const iframe = document.createElement("iframe");
+  iframe.src = `https://www.youtube.com/embed/${videoId}`;
+  iframe.allowFullscreen = true;
+  iframe.loading = "lazy";
+  iframe.title = "YouTube video player";
+
+  card.appendChild(iframe);
+  return card;
 }
 
 
@@ -45,24 +72,19 @@ async function loadAllPlaylistVideos() {
   if (!gallery) return;
 
   const allItems = await fetchAllPlaylistItems();
-  if (allItems.length === 0) return;
+  if (allItems.length === 0) {
+    console.warn("music-gallery: 動画を取得できませんでした");
+    return;
+  }
 
   gallery.innerHTML = "";
 
-  allItems.forEach(item => {
-    const videoId = item.snippet.resourceId?.videoId;
+  allItems.forEach((item) => {
+    const videoId = item.snippet?.resourceId?.videoId;
     if (!videoId) return;
 
-    const wrap = document.createElement("div");
-    wrap.className = "video";
-
-    const iframe = document.createElement("iframe");
-    iframe.src = `https://www.youtube.com/embed/${videoId}`;
-    iframe.allowFullscreen = true;
-    iframe.loading = "lazy";
-
-    wrap.appendChild(iframe);
-    gallery.appendChild(wrap);
+    const card = createVideoCard(videoId);
+    gallery.appendChild(card);
   });
 }
 
@@ -72,36 +94,35 @@ async function loadTopTwoVideos() {
   const section = document.getElementById("top-latest");
   if (!section) return;
 
-  const link = section.querySelector(".more-button");
+  const buttonRow = section.querySelector(".button-row");
 
   const allItems = await fetchAllPlaylistItems();
-  if (allItems.length === 0) return;
+  if (allItems.length === 0) {
+    console.warn("top-latest: 動画を取得できませんでした");
+    return;
+  }
 
-  // ★ 公開日が新しい順に並べ替え
-  const sorted = [...allItems].sort((a, b) =>
-    new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt)
+  // 公開日が新しい順
+  const sorted = [...allItems].sort(
+    (a, b) => new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt)
   );
 
   const latestTwo = sorted.slice(0, 2);
 
   // 既存の動画削除
-  section.querySelectorAll(".video-card").forEach(e => e.remove());
+  section.querySelectorAll(".video-card").forEach((el) => el.remove());
 
-  latestTwo.forEach(item => {
-    const videoId = item.snippet.resourceId?.videoId;
+  latestTwo.forEach((item) => {
+    const videoId = item.snippet?.resourceId?.videoId;
     if (!videoId) return;
 
-    const card = document.createElement("div");
-    card.className = "video-card";
+    const card = createVideoCard(videoId);
 
-    const iframe = document.createElement("iframe");
-    iframe.src = `https://www.youtube.com/embed/${videoId}`;
-    iframe.allowFullscreen = true;
-    iframe.loading = "lazy";
-
-    card.appendChild(iframe);
-
-    section.insertBefore(card, link);
+    if (buttonRow) {
+      section.insertBefore(card, buttonRow);
+    } else {
+      section.appendChild(card);
+    }
   });
 }
 
@@ -109,21 +130,25 @@ async function loadTopTwoVideos() {
 // フェードイン
 function setupFadeIn() {
   const faders = document.querySelectorAll(".fade-in");
-  const obs = new IntersectionObserver((entries, obs) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      e.target.classList.add("appear");
-      obs.unobserve(e.target);
-    });
-  }, { threshold: 0.1 });
 
-  faders.forEach(f => obs.observe(f));
+  const obs = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("appear");
+      observer.unobserve(entry.target);
+    });
+  }, {
+    threshold: 0.1,
+  });
+
+  faders.forEach((fader) => obs.observe(fader));
 }
 
 
 // 読み込み時実行
-document.addEventListener("DOMContentLoaded", () => {
-  loadAllPlaylistVideos();
-  loadTopTwoVideos();
+document.addEventListener("DOMContentLoaded", async () => {
   setupFadeIn();
+
+  await loadAllPlaylistVideos();
+  await loadTopTwoVideos();
 });
