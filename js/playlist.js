@@ -1,20 +1,67 @@
-// playlist.html 専用
-// YouTubeプレイリストから曲カードを作り、クリックでNow Playingを変更する
-
 console.log("playlist.js 読み込まれた");
 
+let player = null;
+let isPlayerReady = false;
 let isPlaying = false;
+let currentVideoId = "";
+let currentTitle = "";
 
+/* YouTube IFrame API 読み込み */
+const tag = document.createElement("script");
+tag.src = "https://www.youtube.com/iframe_api";
+
+const firstScriptTag = document.getElementsByTagName("script")[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+/* YouTube API準備完了 */
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player("youtube-player", {
+    width: "100%",
+    height: "100%",
+    videoId: "",
+    playerVars: {
+      rel: 0,
+      playsinline: 1,
+    },
+    events: {
+      onReady: () => {
+        isPlayerReady = true;
+        loadPlaylistUI();
+      },
+      onStateChange: onPlayerStateChange,
+    },
+  });
+}
+
+function onPlayerStateChange(event) {
+  const playButton = document.querySelector(".play-button");
+
+  if (event.data === YT.PlayerState.PLAYING) {
+    isPlaying = true;
+    setPlayButtonState(playButton, true);
+    startWave();
+  }
+
+  if (
+    event.data === YT.PlayerState.PAUSED ||
+    event.data === YT.PlayerState.ENDED
+  ) {
+    isPlaying = false;
+    setPlayButtonState(playButton, false);
+    stopWave();
+  }
+}
+
+/* プレイリスト読み込み */
 async function loadPlaylistUI() {
   const playlistList = document.querySelector(".playlist-list");
-  const youtubePlayer = document.getElementById("youtube-player");
   const nowTitle = document.querySelector(".player-info h2");
   const artistText = document.querySelector(".artist");
   const playButton = document.querySelector(".play-button");
   const prevButton = document.querySelector(".prev-button");
   const nextButton = document.querySelector(".next-button");
 
-  if (!playlistList || !youtubePlayer || !nowTitle) return;
+  if (!playlistList || !nowTitle) return;
 
   const allItems = await fetchAllPlaylistItems();
 
@@ -46,19 +93,6 @@ async function loadPlaylistUI() {
     card.dataset.videoId = videoId;
     card.dataset.title = title;
 
-    if (index === 0) {
-      card.classList.add("is-active");
-
-      updateNowPlaying({
-        title,
-        videoId,
-        youtubePlayer,
-        nowTitle,
-        artistText,
-        autoplay: false,
-      });
-    }
-
     card.innerHTML = `
       <img src="${thumbnail}" alt="${escapeHtml(title)}のサムネイル">
       <div>
@@ -69,122 +103,92 @@ async function loadPlaylistUI() {
     `;
 
     card.addEventListener("click", () => {
-      selectSong({
-        card,
-        title,
-        videoId,
-        youtubePlayer,
-        nowTitle,
-        artistText,
-        autoplay: true,
-      });
+      selectSong(card, true);
     });
 
     playlistList.appendChild(card);
+
+    if (index === 0) {
+      card.classList.add("is-active");
+      currentVideoId = videoId;
+      currentTitle = title;
+      nowTitle.textContent = title;
+
+      if (artistText) artistText.textContent = "サマースチル";
+
+      if (isPlayerReady && player) {
+        player.cueVideoById(videoId);
+      }
+    }
   });
 
   if (playButton) {
     playButton.addEventListener("click", () => {
-      const activeCard = document.querySelector(".song-card.is-active");
-      if (!activeCard) return;
-
-      const videoId = activeCard.dataset.videoId;
-      const title = activeCard.dataset.title || nowTitle.textContent;
-
-      if (!videoId) return;
+      if (!player || !isPlayerReady || !currentVideoId) return;
 
       if (!isPlaying) {
-        updateNowPlaying({
-          title,
-          videoId,
-          youtubePlayer,
-          nowTitle,
-          artistText,
-          autoplay: true,
-        });
-
-        isPlaying = true;
-        setPlayButtonState(playButton, true);
-        startWave();
+        player.playVideo();
       } else {
-        // YouTube iframeは外部再生の一時停止を直接制御しにくいので、
-        // ここでは見た目の停止＋iframeを再読み込みして止める
-        youtubePlayer.src = `https://www.youtube.com/embed/${videoId}`;
-
-        isPlaying = false;
-        setPlayButtonState(playButton, false);
-        stopWave();
+        player.pauseVideo();
       }
     });
   }
 
   if (prevButton) {
     prevButton.addEventListener("click", () => {
-      moveSong(1, youtubePlayer, nowTitle, artistText);
+      moveSong(1);
     });
   }
 
   if (nextButton) {
     nextButton.addEventListener("click", () => {
-      moveSong(-1, youtubePlayer, nowTitle, artistText);
+      moveSong(-1);
     });
   }
 }
 
-function selectSong({
-  card,
-  title,
-  videoId,
-  youtubePlayer,
-  nowTitle,
-  artistText,
-  autoplay = true,
-}) {
+/* 曲選択 */
+function selectSong(card, autoplay = true) {
+  const nowTitle = document.querySelector(".player-info h2");
+  const artistText = document.querySelector(".artist");
+
+  const videoId = card.dataset.videoId;
+  const title = card.dataset.title;
+
+  if (!videoId || !title) return;
+
   document.querySelectorAll(".song-card").forEach((el) => {
     el.classList.remove("is-active");
   });
 
   card.classList.add("is-active");
 
-  updateNowPlaying({
-    title,
-    videoId,
-    youtubePlayer,
-    nowTitle,
-    artistText,
-    autoplay,
-  });
+  currentVideoId = videoId;
+  currentTitle = title;
 
-  isPlaying = autoplay;
-  setPlayButtonState(document.querySelector(".play-button"), autoplay);
-
-  if (autoplay) {
-    startWave();
-  } else {
-    stopWave();
-  }
-}
-
-function updateNowPlaying({
-  title,
-  videoId,
-  youtubePlayer,
-  nowTitle,
-  artistText,
-  autoplay = false,
-}) {
   nowTitle.textContent = title;
 
   if (artistText) {
     artistText.textContent = "サマースチル";
   }
 
-  youtubePlayer.src = autoplay
-    ? `https://www.youtube.com/embed/${videoId}?autoplay=1`
-    : `https://www.youtube.com/embed/${videoId}`;
+  if (!player || !isPlayerReady) return;
+
+  if (autoplay) {
+    player.loadVideoById(videoId);
+    isPlaying = true;
+    setPlayButtonState(document.querySelector(".play-button"), true);
+    startWave();
+  } else {
+    player.cueVideoById(videoId);
+    isPlaying = false;
+    setPlayButtonState(document.querySelector(".play-button"), false);
+    stopWave();
+  }
 }
 
-function moveSong(direction, youtubePlayer, nowTitle, artistText) {
+/* 前後移動 */
+function moveSong(direction) {
   const cards = Array.from(document.querySelectorAll(".song-card"));
   const currentIndex = cards.findIndex((card) =>
     card.classList.contains("is-active")
@@ -194,78 +198,53 @@ function moveSong(direction, youtubePlayer, nowTitle, artistText) {
 
   let nextIndex = currentIndex + direction;
 
-  if (nextIndex < 0) {
-    nextIndex = cards.length - 1;
-  }
+  if (nextIndex < 0) nextIndex = cards.length - 1;
+  if (nextIndex >= cards.length) nextIndex = 0;
 
-  if (nextIndex >= cards.length) {
-    nextIndex = 0;
-  }
-
-  const nextCard = cards[nextIndex];
-  const videoId = nextCard.dataset.videoId;
-  const title = nextCard.dataset.title;
-
-  if (!videoId || !title) return;
-
-  selectSong({
-    card: nextCard,
-    title,
-    videoId,
-    youtubePlayer,
-    nowTitle,
-    artistText,
-    autoplay: true,
-  });
+  selectSong(cards[nextIndex], true);
 }
 
-function setPlayButtonState(playButton, playing) {
-  if (!playButton) return;
+/* ボタン状態 */
+function setPlayButtonState(button, playing) {
+  if (!button) return;
 
   if (playing) {
-    playButton.classList.add("is-playing");
-    playButton.textContent = "Ⅱ";
+    button.classList.add("is-playing");
+    button.textContent = "Ⅱ";
   } else {
-    playButton.classList.remove("is-playing");
-    playButton.textContent = "▶";
+    button.classList.remove("is-playing");
+    button.textContent = "▶";
   }
 }
 
+/* 波形 */
 function startWave() {
   const wave = document.querySelector(".wave");
-
-  if (wave) {
-    wave.classList.add("is-playing");
-  }
+  if (wave) wave.classList.add("is-playing");
 }
 
 function stopWave() {
   const wave = document.querySelector(".wave");
-
-  if (wave) {
-    wave.classList.remove("is-playing");
-  }
+  if (wave) wave.classList.remove("is-playing");
 }
 
+/* 説明文短縮 */
 function createShortDescription(description) {
-  if (!description) {
-    return "サマースチルの楽曲です。";
-  }
+  if (!description) return "サマースチルの楽曲です。";
 
   const cleanText = description
     .replace(/\n/g, " ")
     .replace(/https?:\/\/\S+/g, "")
     .trim();
 
-  if (!cleanText) {
-    return "サマースチルの楽曲です。";
-  }
+  if (!cleanText) return "サマースチルの楽曲です。";
 
   return cleanText.length > 42
     ? cleanText.slice(0, 42) + "..."
     : cleanText;
 }
 
+/* HTMLエスケープ */
 function escapeHtml(text) {
   return text
     .replaceAll("&", "&amp;")
@@ -274,7 +253,3 @@ function escapeHtml(text) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadPlaylistUI();
-});

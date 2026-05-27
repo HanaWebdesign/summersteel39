@@ -8,79 +8,157 @@
 
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/playlist.css">
-  <link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&display=swap" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&display=swap"
+    rel="stylesheet"
+  >
 </head>
 
 <body class="playlist-page">
 
   <main class="playlist-main">
 
+    <!-- HERO -->
     <section class="playlist-hero fade-in">
 
-      <h1>Music</h1>
+      <p class="playlist-label">
+        Summer Music UI Concept
+      </p>
 
+      <h1>MUSIC</h1>
+
+
+      <!-- PLAYER -->
       <div class="player-card">
+
+        <!-- YouTube -->
         <div class="jacket-area">
-          <iframe
-            id="youtube-player"
-            src=""
-            title="YouTube player"
-            allow="autoplay; encrypted-media"
-            allowfullscreen>
-          </iframe>
+
+          <div id="youtube-player"></div>
+
         </div>
 
+        <!-- INFO -->
         <div class="player-info">
-          <p class="now-text">Now Playing</p>
-          <h2>雨の降る街</h2>
-          <p class="artist">サマースチル</p>
 
+          <p class="now-text">
+            Now Playing
+          </p>
+
+          <h2>Loading...</h2>
+
+          <p class="artist">
+            サマースチル
+          </p>
+
+          <!-- WAVE -->
           <div class="wave">
-            <span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
 
-          <div class="progress">
-            <div class="progress-bar">
-              <div class="progress-current"></div>
-            </div>
+          <!-- BUTTONS -->
+          <div class="control-buttons">
+
+            <button
+              type="button"
+              class="prev-button"
+              aria-label="前の曲"
+            >
+              ◀
+            </button>
+
+            <button
+              type="button"
+              class="play-button"
+              aria-label="再生"
+            >
+              ▶
+            </button>
+
+            <button
+              type="button"
+              class="next-button"
+              aria-label="次の曲"
+            >
+              ▶
+            </button>
+
           </div>
 
-            <div class="control-buttons">
-            <button type="button" class="prev-button" aria-label="前の曲">◀</button>
-            <button type="button" class="play-button" aria-label="再生">▶</button>
-            <button type="button" class="next-button" aria-label="次の曲">▶</button>
-            </div>
         </div>
+
       </div>
+
     </section>
 
+    <!-- PLAYLIST -->
     <section class="playlist-section fade-in">
+
       <div class="section-title">
+
         <p>Playlist</p>
+
         <h2>楽曲一覧</h2>
+
       </div>
 
       <div class="playlist-list">
-        <!-- playlist.js で自動生成 -->
+
+        <p class="loading-text">
+          楽曲を読み込み中...
+        </p>
+
       </div>
+
     </section>
 
+    <!-- CONCEPT -->
+    <section class="concept-section fade-in">
+
+    <!-- BACK -->
     <div class="button-row">
-      <a href="index.html" class="more-button">トップページに戻る</a>
+
+      <a
+        href="index.html"
+        class="more-button"
+      >
+        トップページに戻る
+      </a>
+
     </div>
+
   </main>
 
+  <!-- FOOTER -->
   <footer>
+
     <div class="footer-flex">
+
       <div class="footer-copy">
         &copy; 2025 サマースチル
       </div>
+
     </div>
+
   </footer>
 
+  <!-- 共通JS -->
   <script src="js/script.js"></script>
+
+  <!-- Playlist専用 -->
   <script src="js/playlist.js"></script>
+
 </body>
 </html>
