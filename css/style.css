@@ -97,7 +97,7 @@ body {
   left: 50%;
   width: 70px;
   height: 70px;
-  background-image: url("./image/sunflower.png");
+  background-image: url("../image/sunflower.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -178,25 +178,19 @@ main {
   align-items: center;
   justify-content: center;
   padding: 12px 28px;
-  border: none;
+  border: 1px solid #7ecef4;
   border-radius: 999px;
-  background: #FFD95A;
-  color: #5A4A00;
+  background: transparent;
+  color: #333;
   font-size: 0.95rem;
   text-align: center;
-  text-decoration: none;
   white-space: nowrap;
-  box-shadow:
-    0 10px 24px rgba(255, 217, 90, 0.28);
-  transition:
-    all 0.25s ease;
+  transition: all 0.25s ease;
 }
 
 .more-button:hover {
-  background: #FFC93C;
-  transform: translateY(-2px);
-  box-shadow:
-    0 16px 30px rgba(255, 201, 60, 0.35);
+  background: #7ecef4;
+  color: #fff;
 }
 
 /* ===== 楽曲一覧ページ ===== */
@@ -308,9 +302,6 @@ footer {
 
 /* ===== レスポンシブ ===== */
 @media (max-width: 768px) {
-  .main-visual {
-    content: url("./image/girl.png");
-  }
 
   .logo-overlay {
     width: 80%;
