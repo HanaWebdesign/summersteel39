@@ -1,0 +1,194 @@
+.music-page {
+  background:
+    radial-gradient(circle at top left, rgba(126, 206, 244, 0.45), transparent 35%),
+    linear-gradient(180deg, #eaf9ff 0%, #f7fcff 45%, #ffffff 100%);
+  color: #1f2d36;
+}
+
+/* ===== HERO ===== */
+.music-hero {
+  padding: 80px 20px 56px;
+  background:
+    linear-gradient(rgba(255,255,255,0.35), rgba(255,255,255,0.85)),
+    url("../image/1.png") center / cover;
+}
+
+.music-hero__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.music-label {
+  margin: 0 0 10px;
+  color: #4aa8d8;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.music-hero h1 {
+  margin: 0;
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 1;
+  color: #ffffff;
+  text-shadow: 0 4px 20px rgba(39, 117, 160, 0.45);
+}
+
+.music-copy {
+  margin: 22px 0 36px;
+  font-size: 1.1rem;
+  line-height: 2;
+}
+
+/* ===== NOW PLAYING ===== */
+.now-playing {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 32px;
+  align-items: center;
+  max-width: 820px;
+  padding: 24px;
+  border: 1px solid rgba(255,255,255,0.8);
+  border-radius: 28px;
+  background: rgba(255,255,255,0.58);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 45px rgba(83, 162, 205, 0.25);
+}
+
+.now-playing__jacket img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 22px;
+  box-shadow: 0 12px 30px rgba(41, 104, 138, 0.28);
+}
+
+.now-playing__label {
+  margin: 0 0 8px;
+  color: #4aa8d8;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.now-playing__text h2 {
+  margin: 0 0 8px;
+  font-size: 2.2rem;
+}
+
+/* ===== 波形 ===== */
+.wave {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 54px;
+  margin-top: 24px;
+}
+
+.wave span {
+  display: block;
+  width: 6px;
+  height: 18px;
+  border-radius: 999px;
+  background: #7ecef4;
+  animation: waveMove 1s ease-in-out infinite;
+}
+
+.wave span:nth-child(2) { animation-delay: 0.1s; }
+.wave span:nth-child(3) { animation-delay: 0.2s; }
+.wave span:nth-child(4) { animation-delay: 0.3s; }
+.wave span:nth-child(5) { animation-delay: 0.4s; }
+.wave span:nth-child(6) { animation-delay: 0.5s; }
+.wave span:nth-child(7) { animation-delay: 0.6s; }
+.wave span:nth-child(8) { animation-delay: 0.7s; }
+
+@keyframes waveMove {
+  0%, 100% {
+    height: 14px;
+    opacity: 0.45;
+  }
+  50% {
+    height: 48px;
+    opacity: 1;
+  }
+}
+
+/* ===== MAIN ===== */
+.music-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 20px 80px;
+}
+
+.music-intro {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.music-intro h2 {
+  margin: 0 0 8px;
+  font-size: 2.4rem;
+  color: #4aa8d8;
+}
+
+.music-intro p {
+  margin: 0;
+  color: #51636c;
+}
+
+/* JSで追加される動画一覧 */
+.music-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.music-gallery iframe {
+  width: 100%;
+  border-radius: 18px;
+  box-shadow: 0 12px 28px rgba(64, 130, 166, 0.18);
+}
+
+/* 戻るボタン */
+.music-back {
+  margin-top: 56px;
+  text-align: center;
+}
+
+.music-back a {
+  display: inline-block;
+  padding: 12px 28px;
+  border: 1px solid #7ecef4;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.7);
+  color: #287fae;
+  transition: 0.25s ease;
+}
+
+.music-back a:hover {
+  background: #7ecef4;
+  color: #ffffff;
+}
+
+/* ===== スマホ ===== */
+@media (max-width: 768px) {
+  .music-hero {
+    padding: 56px 16px 40px;
+  }
+
+  .now-playing {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .now-playing__jacket {
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  .music-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .music-hero h1 {
+    font-size: 4rem;
+  }
+}
