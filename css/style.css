@@ -97,7 +97,7 @@ body {
   left: 50%;
   width: 70px;
   height: 70px;
-  background-image: url("./image/sunflower.png");
+  background-image: url("../image/sunflower.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
