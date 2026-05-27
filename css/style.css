@@ -178,7 +178,7 @@ main {
   align-items: center;
   justify-content: center;
   padding: 12px 28px;
-  border: 1px solid #FFCC33;
+  border: 1px solid #7ecef4;
   border-radius: 999px;
   background: transparent;
   color: #333;
@@ -189,8 +189,8 @@ main {
 }
 
 .more-button:hover {
-  background: #FFF450;
-  color: #333;
+  background: #7ecef4;
+  color: #fff;
 }
 
 /* ===== 楽曲一覧ページ ===== */
