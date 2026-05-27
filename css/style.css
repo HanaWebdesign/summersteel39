@@ -186,6 +186,7 @@ main {
   text-align: center;
   white-space: nowrap;
   transition: all 0.25s ease;
+  margin-top: 10px;
 }
 
 .more-button:hover {

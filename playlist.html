@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Summer Playlist UI | サマースチル</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/playlist.css">
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&display=swap" rel="stylesheet">
+</head>
+
+<body class="playlist-page">
+
+  <main class="playlist-main">
+
+    <section class="playlist-hero fade-in">
+
+      <h1>Music</h1>
+
+      <div class="player-card">
+        <div class="jacket-area">
+          <iframe
+            id="youtube-player"
+            src=""
+            title="YouTube player"
+            allow="autoplay; encrypted-media"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="player-info">
+          <p class="now-text">Now Playing</p>
+          <h2>雨の降る街</h2>
+          <p class="artist">サマースチル</p>
+
+          <div class="wave">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+          </div>
+
+          <div class="progress">
+            <div class="progress-bar">
+              <div class="progress-current"></div>
+            </div>
+          </div>
+
+            <div class="control-buttons">
+            <button type="button" class="prev-button" aria-label="前の曲">◀</button>
+            <button type="button" class="play-button" aria-label="再生">▶</button>
+            <button type="button" class="next-button" aria-label="次の曲">▶</button>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="playlist-section fade-in">
+      <div class="section-title">
+        <p>Playlist</p>
+        <h2>楽曲一覧</h2>
+      </div>
+
+      <div class="playlist-list">
+        <!-- playlist.js で自動生成 -->
+      </div>
+    </section>
+
+    <div class="button-row">
+      <a href="index.html" class="more-button">トップページに戻る</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-flex">
+      <div class="footer-copy">
+        &copy; 2025 サマースチル
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script src="js/playlist.js"></script>
+</body>
+</html>
